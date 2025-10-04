@@ -14,6 +14,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const adress2 = localStorage.getItem('adress2');
     const city = localStorage.getItem('city');
     const userImage = localStorage.getItem('image');
+	const pesel = generatePesel(birthday, sex);
 
     // Populate the HTML elements with the data
     document.getElementById('name').textContent = name.toUpperCase();
@@ -26,6 +27,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('mothersFamilyName').textContent = mothersFamilyName.toUpperCase();
     document.getElementById('birthPlace').textContent = birthPlace.toUpperCase();
     document.getElementById('countryOfBirth').textContent = countryOfBirth.toUpperCase();
+	document.getElementById('pesel').textContent = pesel;
     
     const fullAddress = `${adress1.toUpperCase()}\n${adress2} ${city.toUpperCase()}`;
     document.getElementById('adress').textContent = fullAddress;
@@ -189,4 +191,47 @@ function setData(id, value){
 
 function getRandom(min, max) {
   return parseInt(Math.random() * (max - min) + min);
+}
+
+function generatePesel(birthday, sex) {
+    // 1. Parse the date from "DD.MM.YYYY" format
+    const [day, month, year] = birthday.split('.').map(Number);
+    
+    // Get last two digits of the year
+    const yy = String(year).slice(-2).padStart(2, '0');
+
+    // Encode the month for the century (add 20 for 2000s)
+    let mm = month;
+    if (year >= 2000 && year <= 2099) {
+        mm += 20;
+    } else if (year >= 1800 && year <= 1899) {
+        mm += 80;
+    }
+    mm = String(mm).padStart(2, '0');
+
+    const dd = String(day).padStart(2, '0');
+
+    // 2. Generate a 3-digit random serial number
+    const zzz = String(Math.floor(Math.random() * 900) + 100);
+
+    // 3. Generate a random gender digit
+    let x;
+    if (sex === 'm') { // Male (odd)
+        x = String([1, 3, 5, 7, 9][Math.floor(Math.random() * 5)]);
+    } else { // Female (even)
+        x = String([0, 2, 4, 6, 8][Math.floor(Math.random() * 5)]);
+    }
+
+    const first10digits = yy + mm + dd + zzz + x;
+
+    // 4. Calculate the control digit (K)
+    const weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
+    let sum = 0;
+    for (let i = 0; i < 10; i++) {
+        sum += parseInt(first10digits[i]) * weights[i];
+    }
+    
+    const controlDigit = (10 - (sum % 10)) % 10;
+
+    return first10digits + controlDigit;
 }
