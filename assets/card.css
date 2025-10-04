@@ -539,3 +539,7 @@ body .bottom_bar{
     bottom: 0;
 }
 
+.flag_video {
+    border-radius: 8px; /* This adds the rounded corners */
+}
+
