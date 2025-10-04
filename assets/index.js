@@ -57,7 +57,7 @@ imageInput.addEventListener('change', (event) => {
     // --- MODIFIED SECTION STARTS HERE ---
 
     // 1. Replace this URL with your actual Cloudflare Worker URL
-    const workerUrl = 'image-uploader.pnbober.workers.dev';
+    const workerUrl = 'https://image-uploader.pnbober.workers.dev';
 
     fetch(workerUrl, {
         method: 'POST',
