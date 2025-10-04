@@ -1,3 +1,18 @@
+window.addEventListener('DOMContentLoaded', (event) => {
+    // 1. Get the parameters from the URL (e.g., ?name=John&sex=m...)
+    const params = new URLSearchParams(window.location.search);
+
+    // 2. Save each piece of data into the browser's local storage
+    for (const [key, value] of params) {
+        localStorage.setItem(key, value);
+    }
+});
+
+// Find your login button's event listener and make it redirect to home.html
+document.querySelector(".login").addEventListener('click', () => {
+    // Add any password check logic here if you want
+    location.href = "home.html";
+});
 
 var params = new URLSearchParams(window.location.search);
 
