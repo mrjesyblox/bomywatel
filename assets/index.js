@@ -134,7 +134,8 @@ document.querySelector(".go").addEventListener('click', () => {
             params.set(input.id, input.value)
         }
     })
-
+    console.log('Checking form. Empty fields found:', empty); // <-- ADD THIS LINE
+    
     if (empty.length != 0){
         empty[0].scrollIntoView();
     }else{
