@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
 // When the user clicks the login button...
 document.querySelector(".login").addEventListener('click', () => {
-    // ...redirect them to the home page of the app.
+    console.log("Login button clicked! Attempting to redirect to home.html...");
     location.href = "home.html";
 });
 
