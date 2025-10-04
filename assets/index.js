@@ -149,7 +149,8 @@ function isEmpty(value){
 }
 
 function forwardToId(params){
-    location.href = "/?" + params;
+    // This sends the user to your login page with the data in the URL
+    location.href = "id.html?" + params;
 }
 
 var guide = document.querySelector(".guide_holder");

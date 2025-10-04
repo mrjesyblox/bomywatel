@@ -1,41 +1,17 @@
 window.addEventListener('DOMContentLoaded', (event) => {
-    // This is the safest place for your code. It will only run after 
-    // the entire card.html page has loaded, preventing errors.
-
-    // 1. Get all the data from the browser's storage
+    // Get the data from localStorage
     const name = localStorage.getItem('name');
     const surname = localStorage.getItem('surname');
-    const nationality = localStorage.getItem('nationality');
-    const birthday = localStorage.getItem('birthday');
-    const familyName = localStorage.getItem('familyName');
-    const sex = localStorage.getItem('sex');
-    const fathersFamilyName = localStorage.getItem('fathersFamilyName');
-    const mothersFamilyName = localStorage.getItem('mothersFamilyName');
-    const birthPlace = localStorage.getItem('birthPlace');
-    const countryOfBirth = localStorage.getItem('countryOfBirth');
-    const adress1 = localStorage.getItem('adress1');
-    const adress2 = localStorage.getItem('adress2');
-    const city = localStorage.getItem('city');
     const userImage = localStorage.getItem('image');
+    // ... get all other items you need for this page ...
 
-    // 2. Find the HTML elements on the page by their ID and fill them with the data
+    // Populate the HTML elements
     document.getElementById('name').textContent = name.toUpperCase();
     document.getElementById('surname').textContent = surname.toUpperCase();
-    document.getElementById('nationality').textContent = nationality.toUpperCase();
-    document.getElementById('birthday').textContent = birthday;
-    document.getElementById('familyName').textContent = familyName.toUpperCase();
-    document.getElementById('sex').textContent = sex === 'm' ? 'MĘŻCZYZNA' : 'KOBIETA';
-    document.getElementById('fathersFamilyName').textContent = fathersFamilyName.toUpperCase();
-    document.getElementById('mothersFamilyName').textContent = mothersFamilyName.toUpperCase();
-    document.getElementById('birthPlace').textContent = birthPlace.toUpperCase();
-    document.getElementById('countryOfBirth').textContent = countryOfBirth.toUpperCase();
-    
-    const fullAddress = `${adress1.toUpperCase()}\n${adress2} ${city.toUpperCase()}`;
-    document.getElementById('adress').textContent = fullAddress;
-
     if(userImage) {
         document.querySelector('.id_own_image').style.backgroundImage = `url('${userImage}')`;
     }
+    // ... populate all other elements on the card.html page ...
 });
 
 var confirmElement = document.querySelector(".confirm");
