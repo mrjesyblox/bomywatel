@@ -2,8 +2,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
     // Get all the data from the browser's storage
     const name = localStorage.getItem('name');
     const surname = localStorage.getItem('surname');
-    const nationality = localStorage.getItem('nationality'); // <-- Gets nationality
-    const birthday = localStorage.getItem('birthday');       // <-- Gets birthday
+    const nationality = localStorage.getItem('nationality');
+    const birthday = localStorage.getItem('birthday');
     const familyName = localStorage.getItem('familyName');
     const sex = localStorage.getItem('sex');
     const fathersFamilyName = localStorage.getItem('fathersFamilyName');
@@ -14,25 +14,31 @@ window.addEventListener('DOMContentLoaded', (event) => {
     const adress2 = localStorage.getItem('adress2');
     const city = localStorage.getItem('city');
     const userImage = localStorage.getItem('image');
-	const pesel = generatePesel(birthday, sex);
+    
+    // Safety check for PESEL generation from localStorage
+    if (birthday) {
+        const pesel = generatePesel(birthday, sex);
+        document.getElementById('pesel').textContent = pesel;
+        document.getElementById('birthday').textContent = birthday;
+    }
 
     // Populate the HTML elements with the data
-    document.getElementById('name').textContent = name.toUpperCase();
-    document.getElementById('surname').textContent = surname.toUpperCase();
-    document.getElementById('nationality').textContent = nationality.toUpperCase(); // <-- Sets nationality
-    document.getElementById('birthday').textContent = birthday;                       // <-- Sets birthday
-    document.getElementById('familyName').textContent = familyName.toUpperCase();
-    document.getElementById('sex').textContent = sex === 'm' ? 'MĘŻCZYZNA' : 'KOBIETA';
-    document.getElementById('fathersFamilyName').textContent = fathersFamilyName.toUpperCase();
-    document.getElementById('mothersFamilyName').textContent = mothersFamilyName.toUpperCase();
-    document.getElementById('birthPlace').textContent = birthPlace.toUpperCase();
-    document.getElementById('countryOfBirth').textContent = countryOfBirth.toUpperCase();
-	document.getElementById('pesel').textContent = pesel;
+    if (name) document.getElementById('name').textContent = name.toUpperCase();
+    if (surname) document.getElementById('surname').textContent = surname.toUpperCase();
+    if (nationality) document.getElementById('nationality').textContent = nationality.toUpperCase();
+    if (familyName) document.getElementById('familyName').textContent = familyName.toUpperCase();
+    if (sex) document.getElementById('sex').textContent = sex === 'm' ? 'MĘŻCZYZNA' : 'KOBIETA';
+    if (fathersFamilyName) document.getElementById('fathersFamilyName').textContent = fathersFamilyName.toUpperCase();
+    if (mothersFamilyName) document.getElementById('mothersFamilyName').textContent = mothersFamilyName.toUpperCase();
+    if (birthPlace) document.getElementById('birthPlace').textContent = birthPlace.toUpperCase();
+    if (countryOfBirth) document.getElementById('countryOfBirth').textContent = countryOfBirth.toUpperCase();
     
-    const fullAddress = `${adress1.toUpperCase()}\n${adress2} ${city.toUpperCase()}`;
-    document.getElementById('adress').textContent = fullAddress;
+    if (adress1 && adress2 && city) {
+        const fullAddress = `${adress1.toUpperCase()}\n${adress2} ${city.toUpperCase()}`;
+        document.getElementById('adress').textContent = fullAddress;
+    }
 
-    if(userImage) {
+    if (userImage) {
         document.querySelector('.id_own_image').style.backgroundImage = `url('${userImage}')`;
     }
 });
@@ -68,16 +74,19 @@ if (localStorage.getItem("update") == null){
 var date = new Date();
 
 var updateText = document.querySelector(".bottom_update_value");
-updateText.innerHTML = localStorage.getItem("update");
+if (updateText) {
+    updateText.innerHTML = localStorage.getItem("update");
+}
 
 var update = document.querySelector(".update");
-update.addEventListener('click', () => {
-  var newDate = date.toLocaleDateString("pl-PL", options);
-  localStorage.setItem("update", newDate);
-  updateText.innerHTML = newDate;
-
-  scroll(0, 0)
-});
+if (update) {
+    update.addEventListener('click', () => {
+      var newDate = date.toLocaleDateString("pl-PL", options);
+      localStorage.setItem("update", newDate);
+      updateText.innerHTML = newDate;
+      scroll(0, 0)
+    });
+}
 
 function delay(time) {
     return new Promise(resolve => setTimeout(resolve, time));
@@ -86,68 +95,82 @@ function delay(time) {
 setClock();
 function setClock(){
     date = new Date()
-    time.innerHTML = "Czas: " + date.toLocaleTimeString() + " " + date.toLocaleDateString("pl-PL", options);    
+    if (time) {
+        time.innerHTML = "Czas: " + date.toLocaleTimeString() + " " + date.toLocaleDateString("pl-PL", options);    
+    }
     delay(1000).then(() => {
         setClock();
     })
 }
 
 var unfold = document.querySelector(".info_holder");
-unfold.addEventListener('click', () => {
+if (unfold) {
+    unfold.addEventListener('click', () => {
+      if (unfold.classList.contains("unfolded")){
+        unfold.classList.remove("unfolded");
+      }else{
+        unfold.classList.add("unfolded");
+      }
+    })
+}
 
-  if (unfold.classList.contains("unfolded")){
-    unfold.classList.remove("unfolded");
-  }else{
-    unfold.classList.add("unfolded");
-  }
-
-})
-
+// --- URL PARAMETERS HANDLING ---
 var data = {}
-
 var params = new URLSearchParams(window.location.search);
 for (var key of params.keys()){
   data[key] = params.get(key);
 }
 
-document.querySelector(".id_own_image").style.backgroundImage = `url(${data['image']})`;
+// FIX: Only run this block if birthday exists in the URL
+if (data['birthday']) {
+    document.querySelector(".id_own_image").style.backgroundImage = `url(${data['image']})`;
 
-var birthday = data['birthday'];
-var birthdaySplit = birthday.split(".");
-var day = parseInt(birthdaySplit[0]);
-var month = parseInt(birthdaySplit[1]);
-var year = parseInt(birthdaySplit[2]);
+    var birthdayVal = data['birthday'];
+    var birthdaySplit = birthdayVal.split(".");
+    var d = parseInt(birthdaySplit[0]);
+    var m = parseInt(birthdaySplit[1]);
+    var y = parseInt(birthdaySplit[2]);
 
-var birthdayDate = new Date();
-birthdayDate.setDate(day)
-birthdayDate.setMonth(month-1)
-birthdayDate.setFullYear(year)
+    var birthdayDate = new Date();
+    birthdayDate.setDate(d);
+    birthdayDate.setMonth(m-1);
+    birthdayDate.setFullYear(y);
 
-birthday = birthdayDate.toLocaleDateString("pl-PL", options);
+    var formattedBirthday = birthdayDate.toLocaleDateString("pl-PL", options);
 
-var sex = data['sex'];
+    var sexVal = data['sex'];
+    if (sexVal === "m"){
+      sexVal = "Mężczyzna"
+    } else if (sexVal === "k"){
+      sexVal = "Kobieta"
+    }
 
-if (sex === "m"){
-  sex = "Mężczyzna"
-}else if (sex === "k"){
-  sex = "Kobieta"
+    setData("name", data['name']?.toUpperCase());
+    setData("surname", data['surname']?.toUpperCase());
+    setData("nationality", data['nationality']?.toUpperCase());
+    setData("birthday", formattedBirthday);
+    setData("familyName", data['familyName']);
+    setData("sex", sexVal);
+    setData("fathersFamilyName", data['fathersFamilyName']);
+    setData("mothersFamilyName", data['mothersFamilyName']);
+    setData("birthPlace", data['birthPlace']);
+    setData("countryOfBirth", data['countryOfBirth']);
+    setData("adress", "ul. " + data['adress1'] + "<br>" + data['adress2'] + " " + data['city']);
+
+    // PESEL Generation for URL Data
+    var peselMonth = m;
+    if (y >= 2000) { peselMonth += 20; }
+    
+    var genderDigit = (sexVal.toLowerCase() === "mężczyzna") ? "0295" : "0382";
+    var pDay = d < 10 ? "0" + d : d;
+    var pMonth = peselMonth < 10 ? "0" + peselMonth : peselMonth;
+    var peselStr = y.toString().substring(2) + pMonth + pDay + genderDigit + "7";
+    setData("pesel", peselStr);
 }
-
-setData("name", data['name'].toUpperCase());
-setData("surname", data['surname'].toUpperCase());
-setData("nationality", data['nationality'].toUpperCase());
-setData("birthday", birthday);
-setData("familyName", data['familyName']);
-setData("sex", sex);
-setData("fathersFamilyName", data['fathersFamilyName']);
-setData("mothersFamilyName", data['mothersFamilyName']);
-setData("birthPlace", data['birthPlace']);
-setData("countryOfBirth", data['countryOfBirth']);
-setData("adress", "ul. " + data['adress1'] + "<br>" + data['adress2'] + " " + data['city']);
 
 if (localStorage.getItem("homeDate") == null){
   var homeDay = getRandom(1, 25);
-  var homeMonth = getRandom(0, 12);
+  var homeMonth = getRandom(0, 11); // Corrected month range
   var homeYear = getRandom(2012, 2019);
 
   var homeDate = new Date();
@@ -158,35 +181,14 @@ if (localStorage.getItem("homeDate") == null){
   localStorage.setItem("homeDate", homeDate.toLocaleDateString("pl-PL", options))
 }
 
-document.querySelector(".home_date").innerHTML = localStorage.getItem("homeDate")
-
-if (parseInt(year) >= 2000){
-  month = 20 + month;
+const homeDateEl = document.querySelector(".home_date");
+if (homeDateEl) {
+    homeDateEl.innerHTML = localStorage.getItem("homeDate");
 }
-
-var later;
-
-if (sex.toLowerCase() === "mężczyzna"){
-  later = "0295"
-}else{
-  later = "0382"
-}
-
-if (day < 10){
-  day = "0" + day
-}
-
-if (month < 10){
-  month = "0" + month
-}
-
-var pesel = year.toString().substring(2) + month + day + later + "7";
-setData("pesel", pesel)
 
 function setData(id, value){
-
-  document.getElementById(id).innerHTML = value;
-
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = value;
 }
 
 function getRandom(min, max) {
@@ -194,13 +196,9 @@ function getRandom(min, max) {
 }
 
 function generatePesel(birthday, sex) {
-    // 1. Parse the date from "DD.MM.YYYY" format
     const [day, month, year] = birthday.split('.').map(Number);
-    
-    // Get last two digits of the year
     const yy = String(year).slice(-2).padStart(2, '0');
 
-    // Encode the month for the century (add 20 for 2000s)
     let mm = month;
     if (year >= 2000 && year <= 2099) {
         mm += 20;
@@ -210,21 +208,16 @@ function generatePesel(birthday, sex) {
     mm = String(mm).padStart(2, '0');
 
     const dd = String(day).padStart(2, '0');
-
-    // 2. Generate a 3-digit random serial number
     const zzz = String(Math.floor(Math.random() * 900) + 100);
 
-    // 3. Generate a random gender digit
     let x;
-    if (sex === 'm') { // Male (odd)
+    if (sex === 'm') {
         x = String([1, 3, 5, 7, 9][Math.floor(Math.random() * 5)]);
-    } else { // Female (even)
+    } else {
         x = String([0, 2, 4, 6, 8][Math.floor(Math.random() * 5)]);
     }
 
     const first10digits = yy + mm + dd + zzz + x;
-
-    // 4. Calculate the control digit (K)
     const weights = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
     let sum = 0;
     for (let i = 0; i < 10; i++) {
@@ -232,6 +225,5 @@ function generatePesel(birthday, sex) {
     }
     
     const controlDigit = (10 - (sum % 10)) % 10;
-
     return first10digits + controlDigit;
 }
