@@ -38,12 +38,14 @@ body .bottom_bar{
     grid-auto-rows: 70px;
 }
 
-.data_value{
-    color: #52575f;
-    height: max-content;
-    margin-top: auto;
-    margin-bottom: auto;
+.data_value {
+    font-weight: 400; /* or 600 */
     font-size: 15px;
+    line-height: 18px;
+    color: #1e293b;
+    margin-top: 0;
+    margin-bottom: 0;
+    letter-spacing: 0.2px;
 }
 
 .data_holder{
@@ -75,12 +77,14 @@ body .bottom_bar{
     width: 8.8%;
 }
 
-.data_title{
-    font-weight: 600;
-    font-size: 18px;
-    height: max-content;
-    margin-top: auto;
-    margin-bottom: auto;
+.data_title {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 14px;
+    color: #596073;
+    margin-top: 2px;
+    margin-bottom: 8px; /* Spacing between fields */
+    letter-spacing: -0.1px;
 }
 
 .id_image_data{
@@ -258,12 +262,13 @@ body .bottom_bar{
     grid-template-columns: repeat(3, calc(100% / 3));
 }
 
-.time_text{
-    margin-top: 60px;
-    margin-bottom: 20px;
-    color: #666b72;
-    margin-left: auto;
-    margin-right: auto;
+.time_text {
+    margin-top: 48px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #596073;
+    letter-spacing: 0.3px;
     text-align: center;
 }
 
